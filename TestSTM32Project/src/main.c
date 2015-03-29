@@ -9,12 +9,26 @@ int main(int argc, char* argv[])
 	  //configure_system_clock();
 	  __GPIOD_CLK_ENABLE();
 	  GPIO_InitTypeDef GPIO_D;
-	  GPIO_D.Pin = GPIO_PIN_14;
+	  GPIO_D.Pin = GPIO_PIN_15;
 	  GPIO_D.Pull = GPIO_PULLUP;
 	  GPIO_D.Alternate = GPIO_AF0_RTC_50Hz;
 	  GPIO_D.Mode = GPIO_MODE_OUTPUT_PP;
 	  GPIO_D.Speed = GPIO_SPEED_LOW;
 	  HAL_GPIO_Init(GPIOD,&GPIO_D);
-	  while(1);
+	  HAL_GPIO_WritePin(GPIOD,GPIO_PIN_15,GPIO_PIN_SET);
+	  int i = 0;
+	  int toggle = 0;
+	  while(1){
+		  if(toggle == 0){
+			  toggle = 1;
+			  HAL_GPIO_WritePin(GPIOD,GPIO_PIN_15,GPIO_PIN_SET);
+
+		  }
+		  else{
+			  toggle = 0;
+			  HAL_GPIO_WritePin(GPIOD,GPIO_PIN_15,GPIO_PIN_RESET);
+		  }
+		  for(i = 0;i<1000;i++);
+	  }
 
 }
