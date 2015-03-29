@@ -7,8 +7,9 @@ int main(int argc, char* argv[])
 	  HAL_Init();
 	  HAL_SuspendTick();
 	  //configure_system_clock();
-	  __GPIOD_CLK_ENABLE();
-	  GPIO_InitTypeDef GPIO_D;
+	  __GPIOD_CLK_ENABLE(); // Not sure if this is necessary
+	  //////GPIO configuration
+	  GPIO_InitTypeDef GPIO_D;	// SEE 19.2.2 of HAL driver manual
 	  GPIO_D.Pin = GPIO_PIN_15;
 	  GPIO_D.Pull = GPIO_PULLUP;
 	  GPIO_D.Alternate = GPIO_AF0_RTC_50Hz;
@@ -16,6 +17,7 @@ int main(int argc, char* argv[])
 	  GPIO_D.Speed = GPIO_SPEED_LOW;
 	  HAL_GPIO_Init(GPIOD,&GPIO_D);
 	  HAL_GPIO_WritePin(GPIOD,GPIO_PIN_15,GPIO_PIN_SET);
+	  //////// Toggle LED code, for blinking blue LED
 	  int i = 0;
 	  int toggle = 0;
 	  while(1){
