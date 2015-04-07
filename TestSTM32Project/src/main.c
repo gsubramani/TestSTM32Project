@@ -8,9 +8,9 @@ int main(int argc, char* argv[])
 {
 	HAL_Init();
 	HAL_SuspendTick();
-
-	pwm_gen();
-
+	pwm_blinky();
+	//pwm_gen();
+/*
 	  //configure_system_clock();
 	  __GPIOD_CLK_ENABLE(); // Not sure if this is necessary
 	  //////GPIO configuration
@@ -37,9 +37,35 @@ int main(int argc, char* argv[])
 		  }
 		  for(i = 0;i<1000;i++);
 	  }
+*/
+}
+void pwm_blinky()
+{
+	  //////////// STEP 1///////////////
+	  TIM_HandleTypeDef TIM_handle;
+	  TIM_handle.Init.Prescaler = 0x0001;
+	  TIM_handle.Init.CounterMode = TIM_COUNTERMODE_UP;
+	  TIM_handle.Init.Period = 0x0FFF;
+	  TIM_handle.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+	  TIM_handle.Init.RepetitionCounter = 0;
+	  HAL_TIM_Base_MspInit(&TIM_handle);
+	  //////////// STEP 2///////////////
+	  __TIM1_CLK_ENABLE();
+	  //////////// STEP 3///////////////
+	  __GPIOD_CLK_ENABLE();
+	  GPIO_InitTypeDef GPIO_D;	// SEE 19.2.2 of HAL driver manual
+	  GPIO_D.Pin = GPIO_PIN_15;
+	  GPIO_D.Pull = GPIO_PULLUP;
+	  GPIO_D.Alternate = GPIO_AF0_RTC_50Hz;
+	  GPIO_D.Mode = GPIO_MODE_OUTPUT_PP;
+	  GPIO_D.Speed = GPIO_SPEED_LOW;
+	  HAL_GPIO_Init(GPIOD,&GPIO_D);
+	  //////////// STEP 4///////////////
+	  HAL_TIM_Base_Init(&TIM_handle);
+	  HAL_TIM_Base_Start(&TIM_handle);
+	  for(;;);
 
 }
-
 void pwm_gen()
 {
 	//HAL_TIM_PWM_MspInit();
